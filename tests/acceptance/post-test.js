@@ -93,6 +93,24 @@ describe('Acceptance: /post/:id', function() {
     });
   });
 
+  it('updates properties if they change on the server', function() {
+    visit('/post/post_1');
+
+    andThen(function() {
+      expect(find('.post-title').text().trim()).to.equal('Post 1');
+    });
+
+    andThen(function() {
+      Ember.run(function() {
+        ref.child('posts/post_1/title').set('Post 1 UPDATED');
+      });
+    });
+
+    andThen(function() {
+      expect(find('.post-title').text().trim()).to.equal('Post 1 UPDATED');
+    });
+  });
+
   describe('the new comment entry form', function () {
 
     it('contains a username entry field', function() {
