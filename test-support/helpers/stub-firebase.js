@@ -9,23 +9,32 @@ import sinon from 'sinon';
  */
 export default function stubFirebase() {
 
-  var originalSet = Firebase.prototype.set;
-  var originalUpdate = Firebase.prototype.update;
-
   // check for existing stubbing
   if (!Firebase.prototype.set.restore) {
+
+    var originalSet = Firebase.prototype.set;
     sinon.stub(Firebase.prototype, 'set', function(data, cb) {
       originalSet.call(this, data);
       if (typeof cb === 'function') {
-        setTimeout(cb, 0); // maintain async
+        setTimeout(cb, 0);
       }
     });
 
+    var originalUpdate = Firebase.prototype.update;
     sinon.stub(Firebase.prototype, 'update', function(data, cb) {
       originalUpdate.call(this, data);
       if (typeof cb === 'function') {
-        setTimeout(cb, 0); // maintain async
+        setTimeout(cb, 0);
       }
     });
+
+    var originalRemove = Firebase.prototype.remove;
+    sinon.stub(Firebase.prototype, 'remove', function(cb) {
+      originalRemove.call(this);
+      if (typeof cb === 'function') {
+        setTimeout(cb, 0);
+      }
+    });
+
   }
 }
