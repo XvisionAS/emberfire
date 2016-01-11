@@ -1,10 +1,9 @@
 import Firebase from 'firebase';
 
 export default function unstubFirebase() {
-
-  if (!Firebase.prototype.set.restore) {
-    Firebase.prototype.set.restore();
-    Firebase.prototype.update.restore();
-    Firebase.prototype.remove.restore();
-  }
+  ['set', 'update', 'remove'].forEach((method) => {
+    if (Firebase.prototype[method].restore) {
+      Firebase.prototype[method].restore();
+    }
+  });
 }

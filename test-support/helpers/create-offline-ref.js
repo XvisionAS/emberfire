@@ -1,6 +1,5 @@
 import Firebase from 'firebase';
 
-function noop() {}
 
 /**
  * Creates an offline Firebase reference with optional initial data and url.
@@ -12,10 +11,13 @@ function noop() {}
  * @return {Firebase}
  */
 export default function createOfflineRef(initialData, url = 'https://emberfire-tests.firebaseio.com') {
+
+  if (!Firebase.prototype.set.restore) {
+    throw new Error('Please use stubFirebase() before calling this method');
+  }
+
   var ref = new Firebase(url);
   Firebase.goOffline(); // must be called after the ref is created
-  ref.on('value', noop);
-  ref.off('value', noop);
 
   if (initialData) {
     ref.set(initialData);
