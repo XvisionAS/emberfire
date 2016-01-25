@@ -10,31 +10,38 @@ import sinon from 'sinon';
 export default function stubFirebase() {
 
   // check for existing stubbing
-  if (!Firebase.prototype.set.restore) {
+  if (!Firebase._unStub) {
 
     var originalSet = Firebase.prototype.set;
-    sinon.stub(Firebase.prototype, 'set', function(data, cb) {
+    var originalUpdate = Firebase.prototype.update;
+    var originalRemove = Firebase.prototype.remove;
+
+    Firebase._unStub = function () {
+      Firebase.prototype.set = originalSet;
+      Firebase.prototype.update = originalUpdate;
+      Firebase.prototype.remove = originalRemove;
+    };
+
+    Firebase.prototype.set = function(data, cb) {
       originalSet.call(this, data);
       if (typeof cb === 'function') {
         setTimeout(cb, 0);
       }
-    });
+    };
 
-    var originalUpdate = Firebase.prototype.update;
-    sinon.stub(Firebase.prototype, 'update', function(data, cb) {
+    Firebase.prototype.update = function(data, cb) {
       originalUpdate.call(this, data);
       if (typeof cb === 'function') {
         setTimeout(cb, 0);
       }
-    });
+    };
 
-    var originalRemove = Firebase.prototype.remove;
-    sinon.stub(Firebase.prototype, 'remove', function(cb) {
+    Firebase.prototype.remove = function(cb) {
       originalRemove.call(this);
       if (typeof cb === 'function') {
         setTimeout(cb, 0);
       }
-    });
+    };
 
   }
 }

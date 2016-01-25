@@ -12,7 +12,7 @@ import Firebase from 'firebase';
  */
 export default function createOfflineRef(initialData, url = 'https://emberfire-tests.firebaseio.com') {
 
-  if (!Firebase.prototype.set.restore) {
+  if (!Firebase._unStub) {
     throw new Error('Please use stubFirebase() before calling this method');
   }
 
