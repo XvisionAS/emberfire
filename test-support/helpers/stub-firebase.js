@@ -1,5 +1,4 @@
 import Firebase from 'firebase';
-import sinon from 'sinon';
 
 /**
  * When a reference is in offline mode it will not call any callbacks
